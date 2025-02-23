@@ -1,0 +1,27 @@
+# Ignore binary and compiled files
+*.exe
+*.out
+*.dll
+*.so
+*.o
+*.obj
+*.ilk
+*.pdb
+
+# Ignore build and binary folders
+/build/
+/bin/
+/Debug/
+x64/
+Release/
+
+# Ignore Visual Studio project files
+*.sdf
+*.suo
+*.vcxproj*
+*.vcxproj.filters
+*.log
+
+# Ignore system files
+.DS_Store
+Thumbs.db
