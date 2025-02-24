@@ -21,6 +21,7 @@ Release/
 *.vcxproj*
 *.vcxproj.filters
 *.log
+*.sln
 
 # Ignore system files
 .DS_Store
