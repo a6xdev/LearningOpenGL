@@ -4,10 +4,19 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "libraries/lib/imgui/imgui.h"
+#include "libraries/lib/imgui/imgui_impl_glfw.h"
+#include "libraries/lib/imgui/imgui_impl_opengl3.h"
 
 #include "core/scene/camera.h"
 #include "core/renderer/shader.h"
 #include "core/renderer/texture.h"
+
+// Nodes
+#include "core/scene/nodes/Node.h"
+#include "core/scene/nodes/3D/Node3D.h"
+
+#include "core/UI/GuiManager.h"
 
 #include <iostream>
 
@@ -62,8 +71,17 @@ int main() {
 		return -1;
 	}
 
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 
+	// Started o ImGui
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init("#version 130"); // Pode ser diferente dependendo da versão de GLSL
+
+	GuiManager guiManager;
 	Shader ourShader("shaders/shader.vsa", "shaders/shader.fsa");
 
 	float vertices[] = {
@@ -151,6 +169,30 @@ int main() {
 
 	glm::mat4 projection = glm::perspective(glm::radians(70.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 	ourShader.setMat4("projection", projection);
+
+// =========================================================================== //
+// add Node
+// =========================================================================== //
+Node root("Root");
+
+Node* rootNode = &root;
+Node3D cubeNode("cubeNode");
+Node3D cubeNode2("cubeNode2");
+
+cubeNode.setPosition(glm::vec3(20.0f, 0.0f, 20.0f));
+cubeNode.setRotation(glm::vec3(0.0f, 45.0f, 0.0f));
+cubeNode.setScale(glm::vec3(1.0f, 2.0f, 1.0f));
+
+root.add_child(&cubeNode);
+root.add_child(&cubeNode2);
+
+cout << "Root has " << root.get_children().size() << " children.\n" << endl;
+
+std::cout << "Child 1 Position: ("
+	<< cubeNode.getPosition().x << ", "
+	<< cubeNode.getPosition().y << ", "
+	<< cubeNode.getPosition().z << ")\n" << std::endl;
+
 // =========================================================================== //
 // Render loop
 // =========================================================================== //
@@ -196,12 +238,27 @@ int main() {
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
+		// GuiManager
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		guiManager.RenderDebugUI(rootNode);
+
+		glDisable(GL_DEPTH_TEST);
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		glEnable(GL_DEPTH_TEST);
+
 		// check and call events and swap the buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
 	glfwTerminate();
 	return 0;

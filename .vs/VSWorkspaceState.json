@@ -1,7 +1,12 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\core",
+    "\\core\\scene",
+    "\\core\\scene\\Nodes",
+    "\\core\\scene\\Nodes\\3D",
+    "\\shaders"
   ],
-  "SelectedNode": "\\LearningOpenGL.vcxproj",
+  "SelectedNode": "\\LearningOpenGL.sln",
   "PreviewInSolutionExplorer": false
 }
