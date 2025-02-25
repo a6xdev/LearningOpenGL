@@ -9,10 +9,6 @@
 #include "core/renderer/shader.h"
 #include "core/renderer/texture.h"
 
-// Nodes
-#include "core/scene/nodes/node.h"
-#include "core/scene/nodes/3D/Node3D.h"
-
 #include <iostream>
 
 using namespace std;
@@ -155,26 +151,6 @@ int main() {
 
 	glm::mat4 projection = glm::perspective(glm::radians(70.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 	ourShader.setMat4("projection", projection);
-
-// =========================================================================== //
-// add Node
-// =========================================================================== //
-	Node root("Root");
-
-	Node3D cubeNode;
-
-	cubeNode.setPosition(glm::vec3(20.0f, 0.0f, 20.0f));
-	cubeNode.setRotation(glm::vec3(0.0f, 45.0f, 0.0f));
-	cubeNode.setScale(glm::vec3(1.0f, 2.0f, 1.0f));
-
-	cout << "Root has " << root.get_children().size() << " children.\n" << endl;
-
-	std::cout << "Child 1 Position: ("
-		<< cubeNode.getPosition().x << ", "
-		<< cubeNode.getPosition().y << ", "
-		<< cubeNode.getPosition().z << ")\n" << std::endl;
-
-
 // =========================================================================== //
 // Render loop
 // =========================================================================== //
